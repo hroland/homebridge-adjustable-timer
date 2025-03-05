@@ -77,6 +77,7 @@ class DummyTimer {
     this.isTimer = true;
     this.delay = 60000;
     this.delayUnit = config.delayUnit;
+    this.delayMultiplier = config.delayMultiplier || 1;
     this.defBrightness = config.brightness;
     this.brightness = config.brightness;
     this.brightnessStorageKey = this.name + "Brightness";
@@ -89,11 +90,11 @@ class DummyTimer {
 
     this.delay = (() => {
       switch (this.delayUnit) {
-        case "s": return 1000
-        case "m": return 60000
-        case "h": return 3600000
-        case "d": return 86400000
-        default: return 60000;
+        case "s": return 1000 * this.delayMultiplier
+        case "m": return 60000 * this.delayMultiplier
+        case "h": return 3600000 * this.delayMultiplier
+        case "d": return 86400000 * this.delayMultiplier
+        default: return 60000 * this.delayMultiplier;
       }
     })();
 

@@ -65,9 +65,17 @@
                             }
                         ]
                     },
+                    "delayMultiplier": {
+                        "title": "Delay Multiplier",
+                        "description": "Multiply the delay unit by this value (e.g. 5 minutes instead of 1 minute).",
+                        "type": "integer",
+                        "default": 1,
+                        "minimum": 1,
+                        "required": false
+                    },
                     "sensor": {
                         "title": "Enable sensor trigger",
-                        "description": "Sets up a separate sensor that triggers when the timer reaches 0, this allows you to turn off the timer without triggering your automations. Alternatively you can setup a separate switch to cancel the timer (see docs). \n\n (Warning: Leak sensor will trigger critical notification by default that ignore silent & focus modes)",
+                        "description": "Sets up a separate sensor that triggers each time the timer ticks, or reaches 0 (depending on your setting). This allows you to turn off the timer without triggering your automations, or trigger automations time passes. Alternatively you can setup a separate switch to cancel the timer (see docs). \n\n (Warning: Leak sensor will trigger critical notification by default that ignore silent & focus modes)",
                         "type": "string",
                         "default": "off",
                         "required": true,
@@ -104,6 +112,12 @@
                             }
                         ]
                     },
+										"triggerSensorEveryTick": {
+												"title": "Trigger Sensor Every Tick",
+												"type": "boolean",
+												"default": false,
+												"description": "When enabled, the sensor will trigger at every tick (and at the end) instead of only at the end."
+										},
                     "pausable": {
                         "title": "Pausable",
                         "type": "boolean",
