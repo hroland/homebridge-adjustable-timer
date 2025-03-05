@@ -84,6 +84,7 @@ class DummyTimer {
     this.timer = null;
     this.disableLogging = config.disableLogging;
     this.platform = platform;
+    this.triggerSensorEveryTick = config.triggerSensorEveryTick || false;
 
     this.sensor = config.sensor;
     this.sensorTriggered = 0;
@@ -263,6 +264,16 @@ DummyTimer.prototype._setOn = function (on, callback) {
           this.timerRepresentative.setCharacteristic(this.Characteristic.Brightness, this.brightness);
           //   this.storage.setItemSync(this.brightnessStorageKey, this.brightness);
           this.platform.context.cachedBrightness = this.brightness;
+          
+          if (this.triggerSensorEveryTick && this.sensor != "off") {
+            this.sensorTriggered = 1
+            this.sensorService.getCharacteristic(this.sensorCharacteristic).updateValue(this.getSensorState())
+            this.log('Triggering Sensor (Tick)')
+            setTimeout(function () {
+              this.sensorTriggered = 0
+              this.sensorService.getCharacteristic(this.sensorCharacteristic).updateValue(this.getSensorState())
+            }.bind(this), 1000)
+          }
         } else {
           clearInterval(this.timer);
           this.timerRepresentative.setCharacteristic(this.Characteristic.On, false);
@@ -271,7 +282,7 @@ DummyTimer.prototype._setOn = function (on, callback) {
           if (this.sensor != "off") {
             this.sensorTriggered = 1
             this.sensorService.getCharacteristic(this.sensorCharacteristic).updateValue(this.getSensorState())
-            this.log('Triggering Sensor')
+            this.log('Triggering Sensor (End)')
             setTimeout(function () {
               this.sensorTriggered = 0
               this.sensorService.getCharacteristic(this.sensorCharacteristic).updateValue(this.getSensorState())
